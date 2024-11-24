@@ -17,19 +17,31 @@ With Unveil History, the world becomes your museum. Let your curiosity guide you
 ### 📸 Capture or Upload Images
 - Take photos with your camera or select images from your photo library.
 - The app processes your image and provides a detailed description of the subject.
+  ![IMG_13C50A3E9353-1](https://github.com/user-attachments/assets/77430a63-85af-42e8-a7aa-bbc0b8eb1d90)
+
 
 ### 🗺️ Contextual Insights
 - Get historical or cultural information about landmarks, murals, or sculptures.
 - Incorporates **location data** to enhance the relevance of the analysis.
+  ![IMG_8C1C3BD742DD-1](https://github.com/user-attachments/assets/aa1eff46-7d4d-444c-a774-24b07f9afc62)
+
 
 ### 🤖 Chat-Based Q&A
 - Ask questions about the image, and our **AI-powered assistant** will provide meaningful answers.
+![IMG_6427](https://github.com/user-attachments/assets/e7407a24-1880-41a2-ae96-a20b1e94cd01)
+
+![IMG_6428](https://github.com/user-attachments/assets/f4650ca9-9084-4eec-b3e0-48e49df20638)
+
+
 
 ### 🔊 Text-to-Speech
 - Hear the story read aloud with the app’s **text-to-speech** functionality for a hands-free experience.
+  ![IMG_6426](https://github.com/user-attachments/assets/055e8c5a-23a9-441d-b612-3394972d1d30)
+
 
 ### 📍 Location Integration
 - Automatically integrates GPS data or geotags from the image for accurate contextual information.
+![IMG_2A547A8C38AE-1](https://github.com/user-attachments/assets/ec59bb48-9207-4cdf-917c-3ae68f7d7efc)
 
 ---
 
