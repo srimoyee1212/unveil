@@ -54,6 +54,7 @@ With Unveil History, the world becomes your museum. Let your curiosity guide you
 - **OpenAI GPT**: State-of-the-art AI for image recognition and chat-based question answering.
   - **`llama-3.2-11b-vision-preview`**: For detailed image analysis.
   - **`llama-3.2-3b-preview`**: For generating human-like chat responses.
+- **Groq** for API endpoints for the models.
 
 ### 📱 iOS Frameworks
 - **CoreLocation**: Integrates GPS data to improve context.
