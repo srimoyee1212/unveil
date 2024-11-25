@@ -2,6 +2,8 @@
 
 Unveil History is an **iOS app** that unlocks the hidden stories behind buildings, murals, sculptures, street art, and landmarks. With just a photo, you can discover the fascinating context, history, and cultural significance of the world around you.
 
+## Hackathon Prize Winner 🏆 - "BEST FOR AUSTIN IMPACT" at the Meta Llama Impact Hackathon at Austin, TX from Nov 23 - Nov 24 2024.
+
 ## ✨ Impact: Why Unveil History Matters
 
 - **We CONNECT** people to the world’s hidden stories, bridging the gap between the present and the past.
@@ -10,7 +12,9 @@ Unveil History is an **iOS app** that unlocks the hidden stories behind building
 
 With Unveil History, the world becomes your museum. Let your curiosity guide you to uncover the extraordinary stories hidden in plain sight.
 
-Watch our demo where our team went on a walking art tour in Austin today: [here](https://drive.google.com/file/d/1E_0AaOpr86lxIXJzm6kCP7ITCrddLEzB/view?usp=sharing)
+## 📸 Demo
+[Hackathon Presentation](https://www.canva.com/design/DAGXVk6vukM/SYM8Le8itt2UqyABZF_M6g/view?utm_content=DAGXVk6vukM&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+[Watch our demo where our team went on a walking art tour in Austin today](https://drive.google.com/file/d/1E_0AaOpr86lxIXJzm6kCP7ITCrddLEzB/view?usp=sharing)
 
 ---
 
@@ -94,15 +98,15 @@ Watch our demo where our team went on a walking art tour in Austin today: [here]
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repository/unveil-history.git
+   https://github.com/srimoyee1212/unveil.git
    cd unveil-history
    ```
 2. Open in XCode:
    ```bash
-   open UnveilHistory.xcodeproj
+   open unveil.xcodeproj
    ```
 3. Set up API keys:
-   substitute you groq api keys
+   substitute your own groq api keys (get your keys from [here](https://console.groq.com/keys))
 
 4. Build and run the project
 
