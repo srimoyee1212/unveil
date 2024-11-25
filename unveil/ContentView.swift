@@ -274,7 +274,7 @@ struct ContentView: View {
         let url = URL(string: "https://api.groq.com/openai/v1/chat/completions")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer your_api_key", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
@@ -350,7 +350,7 @@ struct ContentView: View {
         let url = URL(string: "https://api.groq.com/openai/v1/chat/completions")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer your_api_key", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
