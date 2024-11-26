@@ -2,7 +2,7 @@
 
 Unveil History is an **iOS app** that unlocks the hidden stories behind buildings, murals, sculptures, street art, and landmarks. With just a photo, you can discover the fascinating context, history, and cultural significance of the world around you.
 
-## Hackathon Prize Winner 🏆 - "BEST FOR AUSTIN IMPACT" at the Meta Llama Impact Hackathon at Austin, TX from Nov 23 - Nov 24 2024.
+## 🏆 Hackathon Prize Winner - "BEST FOR AUSTIN IMPACT" at the Meta Llama Impact Hackathon at Austin, TX from Nov 23 - Nov 24 2024.
 
 ## ✨ Impact: Why Unveil History Matters
 
