@@ -123,9 +123,31 @@ With Unveil History, the world becomes your museum. Let your curiosity guide you
 
 ## 💪 Built With Passion by STM team
 
-- **Srimoyee Mukhopadhyay**
-- **Taegang Kim**
-- **Minho Park**
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/srimoyee1212">
+        <img src="https://github.com/srimoyee1212.png" width="100px;" alt="srimoyee1212"/>
+        <br />
+        <sub><b>Srimoyee Mukhopadhyay</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/mpianrhko">
+        <img src="https://github.com/mpianrhko.png" width="100px;" alt="mpianrhko"/>
+        <br />
+        <sub><b>Minho Park</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/123jklas">
+        <img src="https://github.com/123jklas.png" width="100px;" alt="123jklas"/>
+        <br />
+        <sub><b>Taegang Kim</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
    
 
