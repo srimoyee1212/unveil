@@ -18,6 +18,8 @@ With Unveil History, the world becomes your museum. Let your curiosity guide you
 [Watch our demo where our team went on a walking art tour in Austin today](https://drive.google.com/file/d/1E_0AaOpr86lxIXJzm6kCP7ITCrddLEzB/view?usp=sharing)
 
 ---
+## Update 4/15/2025: The app now uses Llama 4 Scout and its extensive multimodal capabilities replacing Llama 4 vision
+
 
 ## 🛠️ Features
 
@@ -59,7 +61,7 @@ With Unveil History, the world becomes your museum. Let your curiosity guide you
 
 ### 🔗 Backend
 - **OpenAI GPT**: State-of-the-art AI for image recognition and chat-based question answering.
-  - **`llama-3.2-11b-vision-preview`**: For detailed image analysis.
+  - **`meta-llama/llama-4-scout-17b-16e-instruct`**: For detailed scene analysis.
   - **`llama-3.2-3b-preview`**: For generating human-like chat responses.
 - **Groq** for API endpoints for the models.
 
