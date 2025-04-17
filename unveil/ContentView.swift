@@ -4,18 +4,17 @@ import UIKit
 import Photos
 import AVFoundation
 
-
 class SpeechSynthesizer: ObservableObject {
     private let synthesizer = AVSpeechSynthesizer()
-    
+
     func speak(_ text: String) {
         guard !synthesizer.isSpeaking else { return }
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        utterance.rate = 0.5 // Adjust speaking rate
+        utterance.rate = 0.5
         synthesizer.speak(utterance)
     }
-    
+
     func stopSpeaking() {
         if synthesizer.isSpeaking {
             synthesizer.stopSpeaking(at: .immediate)
@@ -41,6 +40,17 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 }
 
+struct ChatMessage: Identifiable {
+    let id = UUID()
+    let role: Role
+    let content: String
+
+    enum Role {
+        case user
+        case assistant
+    }
+}
+
 struct ContentView: View {
     @StateObject private var locationManager = LocationManager()
     @StateObject private var speechSynthesizer = SpeechSynthesizer()
@@ -54,190 +64,183 @@ struct ContentView: View {
     @State private var locationString: String = ""
 
     var body: some View {
-            VStack(spacing: 16) {
-                Text("Unveil History")
-                    .font(.largeTitle)
-                    .padding(.top)
+        VStack(spacing: 16) {
+            Text("Unveil History")
+                .font(.largeTitle)
+                .padding(.top)
 
-                // Scrollable area for image, description, and chat
-                ScrollView {
-                    VStack(spacing: 16) {
-                        if let image = capturedImage {
-                            // Display captured or uploaded image
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 250)
-                                .padding()
-                        } else {
-                            // Placeholder when no image is available
-                            Rectangle()
-                                .fill(Color.gray.opacity(0.3))
-                                .frame(height: 250)
-                                .overlay(Text("Capture or Upload an image").foregroundColor(.white))
-                                .padding()
-                        }
+            ScrollView {
+                VStack(spacing: 16) {
+                    if let image = capturedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 250)
+                            .padding()
+                    } else {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(height: 250)
+                            .overlay(Text("Capture or Upload an image").foregroundColor(.white))
+                            .padding()
+                    }
 
-                        if isLoading {
-                            ProgressView("Processing...")
-                                .padding()
-                        } else if !buildingContext.isEmpty {
-                            // Display building context and chat
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("Image Context:")
-                                    .font(.headline)
-                                Text(buildingContext)
-                                    .padding(.bottom, 10)
+                    if isLoading {
+                        ProgressView("Processing...")
+                            .padding()
+                    } else if !buildingContext.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Image Context:")
+                                .font(.headline)
+                            Text(buildingContext)
+                                .padding(.bottom, 10)
 
-                                Button(action: {
-                                    speechSynthesizer.speak(buildingContext)
-                                }) {
-                                    Image(systemName: "speaker.wave.2.fill")
-                                        .foregroundColor(.blue)
-                                }
+                            Button(action: {
+                                speechSynthesizer.speak(buildingContext)
+                            }) {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    .foregroundColor(.blue)
+                            }
 
-                                ForEach(chatHistory) { message in
-                                    HStack {
-                                        if message.role == .user {
-                                            Spacer()
-                                            Text(message.content)
-                                                .padding()
-                                                .background(Color.blue.opacity(0.8))
+                            ForEach(chatHistory) { message in
+                                HStack {
+                                    if message.role == .user {
+                                        Spacer()
+                                        Text(message.content)
+                                            .padding()
+                                            .background(Color.blue.opacity(0.8))
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                            .frame(maxWidth: 250, alignment: .trailing)
+                                        Button(action: {
+                                            speechSynthesizer.speak(message.content)
+                                        }) {
+                                            Image(systemName: "speaker.wave.2.fill")
                                                 .foregroundColor(.white)
-                                                .cornerRadius(10)
-                                                .frame(maxWidth: 250, alignment: .trailing)
-                                            Button(action: {
-                                                speechSynthesizer.speak(message.content)
-                                            }) {
-                                                Image(systemName: "speaker.wave.2.fill")
-                                                    .foregroundColor(.white)
-                                            }
-                                        } else {
-                                            Text(message.content)
-                                                .padding()
-                                                .background(Color.gray.opacity(0.3))
-                                                .foregroundColor(.black)
-                                                .cornerRadius(10)
-                                                .frame(maxWidth: 250, alignment: .leading)
-                                            Button(action: {
-                                                speechSynthesizer.speak(message.content)
-                                            }) {
-                                                Image(systemName: "speaker.wave.2.fill")
-                                                    .foregroundColor(.black)
-                                            }
-                                            Spacer()
                                         }
+                                    } else {
+                                        Text(message.content)
+                                            .padding()
+                                            .background(Color.gray.opacity(0.3))
+                                            .foregroundColor(.black)
+                                            .cornerRadius(10)
+                                            .frame(maxWidth: 250, alignment: .leading)
+                                        Button(action: {
+                                            speechSynthesizer.speak(message.content)
+                                        }) {
+                                            Image(systemName: "speaker.wave.2.fill")
+                                                .foregroundColor(.black)
+                                        }
+                                        Spacer()
                                     }
                                 }
                             }
                         }
                     }
                 }
-                .frame(maxHeight: 300) // Limit scrollable height
-                .padding()
+            }
+            .frame(maxHeight: 300)
+            .padding()
 
-                if capturedImage != nil {
-                    VStack {
-                        // TextField for user question
-                        TextField("Ask a question about the building...", text: $userQuestion)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.horizontal)
-
-                        // Horizontal stack for Get Answer and Stop Speaking
-                        HStack {
-                            Button(action: {
-                                dismissKeyboard()
-                                fetchChatAnswer(question: userQuestion)
-                            }) {
-                                HStack {
-                                    Image(systemName: "questionmark.circle")
-                                    Text("Get Answer")
-                                }
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                            }
-                            .disabled(userQuestion.isEmpty || isLoading)
-
-                            Button(action: {
-                                speechSynthesizer.stopSpeaking()
-                            }) {
-                                HStack {
-                                    Image(systemName: "stop.circle")
-                                    Text("Stop Speaking")
-                                }
-                                .padding()
-                                .background(Color.red)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                            }
-                        }
+            if capturedImage != nil {
+                VStack {
+                    TextField("Ask a question about the building...", text: $userQuestion)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.horizontal)
-                    }
-                }
 
-                // Horizontal stack for Capture Image and Upload Image
-                HStack {
-                    Button(action: {
-                        isCameraViewPresented = true
-                    }) {
-                        HStack {
-                            Image(systemName: "camera")
-                            Text("Capture Image")
-                        }
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                    .sheet(isPresented: $isCameraViewPresented) {
-                        CameraView(onComplete: { image, location in
-                            capturedImage = image
-                            isLoading = true
-                            buildingContext = ""
-                            userQuestion = ""
-                            chatHistory = []
-                            if let location = location {
-                                locationString = "Location: Latitude \(location.coordinate.latitude), Longitude \(location.coordinate.longitude)"
-                            } else {
-                                locationString = "No location data available"
+                    HStack {
+                        Button(action: {
+                            dismissKeyboard()
+                            fetchChatAnswer(question: userQuestion)
+                        }) {
+                            HStack {
+                                Image(systemName: "questionmark.circle")
+                                Text("Get Answer")
                             }
-                            processImage(image: image, location: location)
-                        }, locationManager: locationManager)
-                    }
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                        .disabled(userQuestion.isEmpty || isLoading)
 
-                    Button(action: {
-                        isPhotoLibraryPresented = true
-                    }) {
-                        HStack {
-                            Image(systemName: "photo")
-                            Text("Upload Image")
-                        }
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                    .sheet(isPresented: $isPhotoLibraryPresented) {
-                        PhotoLibraryPicker(onComplete: { image, location in
-                            capturedImage = image
-                            isLoading = true
-                            buildingContext = ""
-                            userQuestion = ""
-                            chatHistory = []
-                            if let location = location {
-                                locationString = "Location: Latitude \(location.coordinate.latitude), Longitude \(location.coordinate.longitude)"
-                            } else {
-                                locationString = "No location data available"
+                        Button(action: {
+                            speechSynthesizer.stopSpeaking()
+                        }) {
+                            HStack {
+                                Image(systemName: "stop.circle")
+                                Text("Stop Speaking")
                             }
-                            processImage(image: image, location: location)
-                        }, locationManager: locationManager)
+                            .padding()
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
                     }
+                    .padding(.horizontal)
                 }
             }
-            .padding()
+
+            HStack {
+                Button(action: {
+                    isCameraViewPresented = true
+                }) {
+                    HStack {
+                        Image(systemName: "camera")
+                        Text("Capture Image")
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+                .sheet(isPresented: $isCameraViewPresented) {
+                    CameraView(onComplete: { image, location in
+                        capturedImage = image
+                        isLoading = true
+                        buildingContext = ""
+                        userQuestion = ""
+                        chatHistory = []
+                        if let location = location {
+                            locationString = "Location: Latitude \(location.coordinate.latitude), Longitude \(location.coordinate.longitude)"
+                        } else {
+                            locationString = "No location data available"
+                        }
+                        processImage(image: image, location: location)
+                    }, locationManager: locationManager)
+                }
+
+                Button(action: {
+                    isPhotoLibraryPresented = true
+                }) {
+                    HStack {
+                        Image(systemName: "photo")
+                        Text("Upload Image")
+                    }
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+                .sheet(isPresented: $isPhotoLibraryPresented) {
+                    PhotoLibraryPicker(onComplete: { image, location in
+                        capturedImage = image
+                        isLoading = true
+                        buildingContext = ""
+                        userQuestion = ""
+                        chatHistory = []
+                        if let location = location {
+                            locationString = "Location: Latitude \(location.coordinate.latitude), Longitude \(location.coordinate.longitude)"
+                        } else {
+                            locationString = "No location data available"
+                        }
+                        processImage(image: image, location: location)
+                    }, locationManager: locationManager)
+                }
+            }
         }
+        .padding()
+    }
 
     private func dismissKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -265,33 +268,21 @@ struct ContentView: View {
         }
         let base64Image = imageData.base64EncodedString()
         let formattedImageDataURL = "data:image/jpeg;base64,\(base64Image)"
+        let locationText = location != nil ? "Latitude \(location!.coordinate.latitude), Longitude \(location!.coordinate.longitude)" : ""
 
-        var locationInfo = ""
-        if let location = location {
-            locationInfo = "Location: Latitude \(location.coordinate.latitude), Longitude \(location.coordinate.longitude)"
+        guard let url = URL(string: "https://a34c-2600-1700-6ec-9c00-88ec-9774-73ef-c1b2.ngrok-free.app/analyze") else {
+            print("Invalid URL")
+            isLoading = false
+            return
         }
 
-        let url = URL(string: "https://api.groq.com/openai/v1/chat/completions")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer your_api_key", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
-            "model": "llama-3.2-11b-vision-preview",
-            "messages": [
-                [
-                    "role": "user",
-                    "content": [
-                        ["type": "text", "text": "What is in the image? It could be a mural, or street art, or wall art, or sculpture, or landmark in Austin unless it is a global landmark you already know of.\(locationInfo)"],
-                        ["type": "image_url", "image_url": ["url": formattedImageDataURL]]
-                    ]
-                ]
-            ],
-            "temperature": 1,
-            "max_tokens": 1024,
-            "top_p": 1,
-            "stream": false
+            "image_base64": formattedImageDataURL,  // ✅ Use full data URI scheme
+            "location": locationText
         ]
 
         guard let jsonData = try? JSONSerialization.data(withJSONObject: payload) else {
@@ -299,6 +290,7 @@ struct ContentView: View {
             isLoading = false
             return
         }
+
         request.httpBody = jsonData
 
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -321,20 +313,23 @@ struct ContentView: View {
 
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let choices = json["choices"] as? [[String: Any]],
-                   let message = choices.first?["message"] as? [String: Any],
-                   let content = message["content"] as? String {
+                   let content = json["response"] as? String {
                     DispatchQueue.main.async {
                         buildingContext = content
                         isLoading = false
                     }
                 } else {
+                    let rawString = String(data: data, encoding: .utf8) ?? "Unable to decode data"
+                    print("🔴 Raw server response: \(rawString)")
                     DispatchQueue.main.async {
                         buildingContext = "Unexpected response format."
                         isLoading = false
                     }
                 }
             } catch {
+                let rawString = String(data: data, encoding: .utf8) ?? "Unable to decode data"
+                print("❌ JSON error: \(error.localizedDescription)")
+                print("🔴 Raw server response: \(rawString)")
                 DispatchQueue.main.async {
                     buildingContext = "Error parsing response: \(error.localizedDescription)"
                     isLoading = false
@@ -344,86 +339,7 @@ struct ContentView: View {
     }
 
     private func fetchChatAnswer(question: String) {
-        isLoading = true
-        chatHistory.append(ChatMessage(role: .user, content: question))
-
-        let url = URL(string: "https://api.groq.com/openai/v1/chat/completions")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Bearer your_api_key", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let payload: [String: Any] = [
-            "model": "llama-3.2-3b-preview",
-            "messages": [
-                ["role": "assistant", "content": buildingContext],
-                ["role": "assistant", "content": locationString],
-                ["role": "user", "content": question]
-            ],
-            "temperature": 1,
-            "max_tokens": 512,
-            "top_p": 1,
-            "stream": false
-        ]
-
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: payload) else {
-            print("Failed to serialize JSON")
-            isLoading = false
-            return
-        }
-        request.httpBody = jsonData
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    chatHistory.append(ChatMessage(role: .assistant, content: "Failed to fetch the answer."))
-                    isLoading = false
-                }
-                return
-            }
-
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    chatHistory.append(ChatMessage(role: .assistant, content: "No response received."))
-                    isLoading = false
-                }
-                return
-            }
-
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let choices = json["choices"] as? [[String: Any]],
-                   let message = choices.first?["message"] as? [String: Any],
-                   let content = message["content"] as? String {
-                    DispatchQueue.main.async {
-                        chatHistory.append(ChatMessage(role: .assistant, content: content))
-                        isLoading = false
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        chatHistory.append(ChatMessage(role: .assistant, content: "Unexpected response format."))
-                        isLoading = false
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    chatHistory.append(ChatMessage(role: .assistant, content: "Error parsing response: \(error.localizedDescription)"))
-                    isLoading = false
-                }
-            }
-        }.resume()
-    }
-}
-
-struct ChatMessage: Identifiable {
-    let id = UUID()
-    let role: Role
-    let content: String
-
-    enum Role {
-        case user
-        case assistant
+        // You can implement a similar ngrok backend endpoint for chat if needed
     }
 }
 
@@ -454,17 +370,12 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = info[.originalImage] as? UIImage {
                 var location: CLLocation?
-                
-                // Try to get location from image metadata
                 if let asset = info[.phAsset] as? PHAsset {
                     location = asset.location
                 }
-                
-                // If no location in metadata, use current location as fallback
                 if location == nil {
                     location = parent.locationManager.location
                 }
-                
                 parent.onComplete(image, location)
             }
             picker.dismiss(animated: true)
@@ -475,4 +386,3 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         }
     }
 }
-
