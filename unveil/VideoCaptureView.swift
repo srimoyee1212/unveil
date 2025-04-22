@@ -1,40 +1,38 @@
-import SwiftUI
-import UIKit
-import CoreLocation
 
-struct CameraView: UIViewControllerRepresentable {
-    var onComplete: (UIImage, CLLocation?) -> Void
+import SwiftUI
+import AVFoundation
+import Photos
+
+struct VideoCaptureView: UIViewControllerRepresentable {
+    var onComplete: (URL, CLLocation?) -> Void
     @ObservedObject var locationManager: LocationManager
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
         picker.sourceType = .camera
+        picker.mediaTypes = ["public.movie"]
+        picker.videoQuality = .typeHigh
         return picker
     }
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
+        Coordinator(self)
     }
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: CameraView
+        let parent: VideoCaptureView
 
-        init(_ parent: CameraView) {
+        init(_ parent: VideoCaptureView) {
             self.parent = parent
         }
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                let location = parent.locationManager.location
-                                if let loc = location {
-                                    print("📍 Got location: \(loc.coordinate.latitude), \(loc.coordinate.longitude)")
-                                } else {
-                                    print("⚠️ Location is nil")
-                                }
-                parent.onComplete(image, parent.locationManager.location)
+            if let videoURL = info[.mediaURL] as? URL {
+                let location: CLLocation? = parent.locationManager.location
+                parent.onComplete(videoURL, location)
             }
             picker.dismiss(animated: true)
         }
