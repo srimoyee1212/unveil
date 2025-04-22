@@ -18,6 +18,7 @@ With Unveil History, the world becomes your museum. Let your curiosity guide you
 [Watch our demo where our team went on a walking art tour in Austin today](https://drive.google.com/file/d/1E_0AaOpr86lxIXJzm6kCP7ITCrddLEzB/view?usp=sharing)
 
 ---
+## Update 4/21/2025: Unveil now supports live video recording and video upload, now providing more comprehensive and richer detail about the history around you on the go!
 ## Update 4/15/2025: The app now uses Llama 4 Scout and its extensive multimodal capabilities replacing Llama 3 vision
 
 
