@@ -232,7 +232,7 @@ struct ContentView: View {
             : locationManager.formattedAddress()
 
 
-        guard let url = URL(string: "https://64ea-2600-1700-6ec-9c00-3474-bf0f-eed8-ece3.ngrok-free.app/analyze") else {
+        guard let url = URL(string: "https://8b61-2600-1700-6ec-9c00-28b0-94aa-919d-c355.ngrok-free.app/analyze") else {
             print("Invalid URL")
             isLoading = false
             return
@@ -303,7 +303,7 @@ struct ContentView: View {
     private func fetchChatAnswer(question: String) {
         isLoading = true
 
-        guard let url = URL(string: "https://64ea-2600-1700-6ec-9c00-3474-bf0f-eed8-ece3.ngrok-free.app/chat") else {
+        guard let url = URL(string: "https://8b61-2600-1700-6ec-9c00-28b0-94aa-919d-c355.ngrok-free.app/chat") else {
             print("Invalid chat endpoint URL")
             isLoading = false
             return
@@ -361,7 +361,7 @@ struct ContentView: View {
         buildingContext = "Processing video..."
 
         let boundary = UUID().uuidString
-        guard let serverURL = URL(string: "https://64ea-2600-1700-6ec-9c00-3474-bf0f-eed8-ece3.ngrok-free.app/analyze_video") else {
+        guard let serverURL = URL(string: "https://8b61-2600-1700-6ec-9c00-28b0-94aa-919d-c355.ngrok-free.app/analyze_video") else {
             print("Invalid video endpoint URL")
             self.isLoading = false
             return
